@@ -1,0 +1,15 @@
+UCLA nodes 1.0 
+# Created      : Today
+# User         : Gemini (AI Assistant)
+# Description  : 8-node tree graph derived from Adjacency Matrix
+
+NumNodes : 8
+NumTerminals : 0
+a
+b
+c
+d
+e
+f
+g
+h

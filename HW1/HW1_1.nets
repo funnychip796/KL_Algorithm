@@ -1,0 +1,71 @@
+UCLA nets 1.0
+# Created      : Today
+# User         : Gemini (AI Assistant)
+# Description  : 17 standard 2-terminal nets extracted from the matrix
+
+NumPins : 34
+
+# Connections of node 1
+NetDegree : 2
+1 B
+4 B
+NetDegree : 2
+1 B
+8 B
+NetDegree : 2
+1 B
+10 B
+
+# Connections of node 2
+NetDegree : 2
+2 B
+7 B
+NetDegree : 2
+2 B
+8 B
+
+# Connections of node 3
+NetDegree : 2
+3 B
+6 B
+NetDegree : 2
+3 B
+7 B
+NetDegree : 2
+3 B
+9 B
+
+# Connections of node 4 (excluding connections already established with node 1)
+NetDegree : 2
+4 B
+6 B
+NetDegree : 2
+4 B
+7 B
+NetDegree : 2
+4 B
+10 B
+
+# Connections of node 5
+NetDegree : 2
+5 B
+6 B
+NetDegree : 2
+5 B
+7 B
+NetDegree : 2
+5 B
+8 B
+
+# Connections of node 7 (excluding connections already established with nodes 2,3,4,5)
+NetDegree : 2
+7 B
+10 B
+
+# Connections of node 8 (excluding connections already established with nodes 1,2,5)
+NetDegree : 2
+8 B
+9 B
+NetDegree : 2
+8 B
+10 B

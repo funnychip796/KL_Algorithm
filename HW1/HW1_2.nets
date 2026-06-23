@@ -1,0 +1,33 @@
+UCLA nets 1.0
+# Created      : Today
+# User         : Gemini (AI Assistant)
+# Description  : 7 standard 2-terminal nets (tree edges)
+
+NumPins : 14
+
+# Connections of node a
+NetDegree : 2
+a B
+b B
+NetDegree : 2
+a B
+c B
+NetDegree : 2
+a B
+d B
+
+# Connections of node b (excluding connections already established with a)
+NetDegree : 2
+b B
+e B
+NetDegree : 2
+b B
+f B
+
+# Connections of node d (excluding connections already established with a)
+NetDegree : 2
+d B
+g B
+NetDegree : 2
+d B
+h B

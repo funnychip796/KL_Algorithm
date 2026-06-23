@@ -1,3 +1,11 @@
+/*
+ * main.c
+ * 
+ * Implementation of the Kernighan-Lin (KL) algorithm for graph/hypergraph partitioning.
+ * It reads a hypergraph from UCLA format .nodes and .nets files, and partitions
+ * the nodes into two sets (A and B) while attempting to minimize the cut size.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,23 +18,27 @@ typedef int boolean;
 #define FALSE 0
 #define TRUE  1
 
+// Structure representing a node (or cell) in the hypergraph
 typedef struct {
-    char name[MAX_NAME_LEN];
-    int partition;
-    boolean locked;
+    char name[MAX_NAME_LEN]; // Name of the node
+    int partition;           // Which partition the node belongs to (0 for A, 1 for B)
+    boolean locked;          // Whether the node is locked during the current KL pass
 } Node;
 
+// Structure representing a net (hyperedge) connecting multiple nodes
 typedef struct {
-    int degree;
-    int *pins;
+    int degree; // Number of pins (nodes) connected to this net
+    int *pins;  // Array of node indices connected to this net
 } Net;
 
-Node *nodes = NULL;
-Net *nets = NULL;
-double **C = NULL;
-int num_nodes = 0;
-int num_nets = 0;
+// Global variables to store the graph/hypergraph representation
+Node *nodes = NULL;    // Array of all nodes
+Net *nets = NULL;      // Array of all nets
+double **C = NULL;     // Connectivity matrix (edge weights between nodes)
+int num_nodes = 0;     // Total number of nodes
+int num_nets = 0;      // Total number of nets
 
+// Finds the index of a node given its name. Returns -1 if not found.
 int find_node_id(const char *name) {
     int i;
     for (i = 0; i < num_nodes; i++) {
@@ -35,6 +47,8 @@ int find_node_id(const char *name) {
     return -1;
 }
 
+// Calculates the total cut size of the current partition.
+// A net contributes to the cut size if it connects nodes in different partitions.
 int cut_size() {
     int cut = 0;
     int i, p;
@@ -52,6 +66,7 @@ int cut_size() {
     return cut;
 }
 
+// Helper function to print the names of all nodes in a given partition
 static void print_nodes(int part) {
     int i;
     for (i = 0; i < num_nodes; i++)
@@ -59,6 +74,7 @@ static void print_nodes(int part) {
     printf("\n");
 }
 
+// Executes the Kernighan-Lin (KL) heuristic to optimize the initial bisection.
 void run_kl() {
     int max_passes = 100;
     int pass = 0;
@@ -70,7 +86,9 @@ void run_kl() {
     int init_cut, cur_cut, final_cut;
     double E, I;
 
+    // D represents the difference between external and internal costs for each node
     double *D;
+    // Arrays to record the sequence of swapped nodes and the corresponding gain history
     int *swap_A;
     int *swap_B;
     double *g_hist;
@@ -92,8 +110,10 @@ void run_kl() {
     while (improved && pass < max_passes) {
         pass++;
 
+        // Unlock all nodes at the start of a new pass
         for (i = 0; i < num_nodes; i++) nodes[i].locked = FALSE;
 
+        // Calculate the initial D values for all nodes: D[i] = E[i] - I[i]
         for (i = 0; i < num_nodes; i++) {
             E = 0; I = 0;
             for (j = 0; j < num_nodes; j++) {
@@ -186,6 +206,7 @@ void run_kl() {
     free(D); free(swap_A); free(swap_B); free(g_hist);
 }
 
+// Main function: Parses UCLA format .nodes and .nets files and runs the KL algorithm
 int main(int argc, char *argv[]) {
     int i, j, p;
     FILE *f_nodes, *f_nets;
@@ -247,6 +268,8 @@ int main(int argc, char *argv[]) {
                 nets[num_nets - 1].pins[p] = find_node_id(node_name);
             }
 
+            // Convert hyperedges (nets) to edges (clique model)
+            // A net with degree 'd' is modeled as a clique where each edge has weight 1/(d-1)
             weight = 1.0 / (degree - 1.0);
             for (i = 0; i < degree; i++) {
                 for (j = i + 1; j < degree; j++) {

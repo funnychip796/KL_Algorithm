@@ -155,6 +155,9 @@ void run_kl() {
             nodes[best_a].partition = 1;
             nodes[best_b].partition = 0;
 
+            // Update D-values for all unlocked nodes in O(n).
+            // Each C[x][best_a] / C[x][best_b] lookup is O(1) thanks to the
+            // pre-computed adjacency matrix, eliminating the need to re-traverse nets.
             for (x = 0; x < num_nodes; x++) {
                 if (nodes[x].locked) continue;
                 if (nodes[x].partition == 0)
@@ -243,6 +246,8 @@ int main(int argc, char *argv[]) {
     }
     fclose(f_nodes);
 
+    // Pre-allocate the adjacency matrix C[n][n], initialized to zero.
+    // This avoids repeated net traversal during the KL swap loop.
     C = (double **)malloc(num_nodes * sizeof(double *));
     for (i = 0; i < num_nodes; i++)
         C[i] = (double *)calloc(num_nodes, sizeof(double));
@@ -268,8 +273,10 @@ int main(int argc, char *argv[]) {
                 nets[num_nets - 1].pins[p] = find_node_id(node_name);
             }
 
-            // Convert hyperedges (nets) to edges (clique model)
-            // A net with degree 'd' is modeled as a clique where each edge has weight 1/(d-1)
+            // Convert hyperedges (nets) to edges using the clique net model:
+            // a net of degree d becomes a complete subgraph where each edge carries
+            // weight 1/(d-1). All weights are accumulated into C once, up front,
+            // so that any C[u][v] lookup during the KL pass is O(1).
             weight = 1.0 / (degree - 1.0);
             for (i = 0; i < degree; i++) {
                 for (j = i + 1; j < degree; j++) {

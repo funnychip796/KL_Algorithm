@@ -1,0 +1,13 @@
+# Compiled executables
+kl_partition
+kl_partition.exe
+*.exe
+
+# Object files
+*.o
+*.obj
+
+# Core dumps and logs
+*.log
+*.out
+vgcore.*

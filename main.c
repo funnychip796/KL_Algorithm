@@ -4,6 +4,7 @@
  * Implementation of the Kernighan-Lin (KL) algorithm for graph/hypergraph partitioning.
  * It reads a hypergraph from UCLA format .nodes and .nets files, and partitions
  * the nodes into two sets (A and B) while attempting to minimize the cut size.
+ *
  */
 
 #include <stdio.h>

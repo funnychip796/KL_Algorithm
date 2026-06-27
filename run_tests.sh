@@ -23,7 +23,7 @@ fi
 echo -e "Using compiler: ${GREEN}${COMPILER}${NC}"
 
 echo -e "Compiling main.c..."
-$COMPILER -O3 main.c -o kl_partition
+$COMPILER main.c -o kl_partition
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}Compilation successful! Executable created: ./kl_partition${NC}\n"

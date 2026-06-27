@@ -37,7 +37,7 @@ If you wish to compile and run a single test dataset manually, follow these step
 
 Compile using `gcc`:
 ```bash
-gcc -O3 main.c -o kl_partition
+gcc main.c -o kl_partition
 ```
 
 ### 2. Run a test case
